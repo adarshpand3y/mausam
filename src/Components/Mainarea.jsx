@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 
 const response = {
     "coord": {
@@ -44,7 +45,19 @@ const response = {
 };
 
 const Mainarea = () => {
-    console.log(response);
+    const apiKey = process.env.REACT_APP_API_KEY;
+    // console.log(response);
+
+    useEffect(async () => {
+        try {
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=kolkata&appid=${apiKey}`);
+            const parsedData = await response.json();
+            console.log(parsedData);
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
     return <>
         <div className="container my-4">
             <div className="p-5 border border-secondary rounded">
