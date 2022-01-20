@@ -1,7 +1,7 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-const response = {
+const serverResponse = {
     "coord": {
         "lon": -0.13,
         "lat": 51.51
@@ -46,13 +46,36 @@ const response = {
 
 const Mainarea = () => {
     const apiKey = process.env.REACT_APP_API_KEY;
-    // console.log(response);
+    // console.log(serverResponse);
+
+    const [userInput, setuserInput] = useState("");
+    const [serverResponse, setServerserverResponse] = useState({});
+    const [loading, setloading] = useState(true);
+
+    const handleOnChange = (event) => {
+        setuserInput(event.target.value);
+    }
+
+    const handleFetchData = async (event) => {
+        event.preventDefault();
+        try {
+            setloading(true);
+            const serverResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=${apiKey}`);
+            const parsedData = await serverResponse.json();
+            console.log(parsedData);
+            setServerserverResponse(parsedData);
+            setloading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(async () => {
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=kolkata&appid=${apiKey}`);
-            const parsedData = await response.json();
-            console.log(parsedData);
+            const serverResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=kolkata&appid=${apiKey}`);
+            const parsedData = await serverResponse.json();
+            setServerserverResponse(parsedData);
+            setloading(false);
         } catch (error) {
             console.log(error);
         }
@@ -64,23 +87,24 @@ const Mainarea = () => {
                 <h1 className='text-center'>React Mausam App</h1>
                 <div className="my-4 p-5">
                     <div className="d-flex">
-                        <input type="text" className="form-control me-2" id="cityInput" placeholder="Enter your city here" />
-                        <button className="btn btn-dark">Search!</button>
+                        <input type="text" className="form-control me-2" onChange={handleOnChange} value={userInput} id="cityInput" placeholder="Enter your city here" />
+                        <button className="btn btn-dark" onClick={handleFetchData} type='submit'>Search!</button>
                     </div>
+                    {loading? "":
                     <div className="my-4">
-                        <h4 className='text-center'>Showing Results for: {`${response.name}`}</h4>
-                        <h5 className='text-center'>Latitude: {`${response.coord.lat}`} Longitude: {`${response.coord.lon}`}</h5>
+                        <h4 className='text-center'>Showing Results for: {`${serverResponse.name}`}</h4>
+                        <h5 className='text-center'>Latitude: {`${serverResponse.coord.lat}`} Longitude: {`${serverResponse.coord.lon}`}</h5>
                         <h5 className='my-2'>Weather Updates:-</h5>
                         <ul>
-                            <li><p>Mainly {response.weather[0].main}</p></li>
-                            <li><p className='text-capitalize'>{response.weather[0].description}</p></li>
-                            <li><p className='text-capitalize'>Max Temperature: {response.main.temp_max}</p></li>
-                            <li><p className='text-capitalize'>Min Temperature: {response.main.temp_min}</p></li>
-                            <li><p className='text-capitalize'>Average Temperature: {response.main.temp}</p></li>
-                            <li><p className='text-capitalize'>Pressure: {response.main.pressure}</p></li>
-                            <li><p className='text-capitalize'>Humidity: {response.main.humidity}</p></li>
+                            <li><p>Mainly {serverResponse.weather[0].main}</p></li>
+                            <li><p className='text-capitalize'>{serverResponse.weather[0].description}</p></li>
+                            <li><p className='text-capitalize'>Max Temperature: {serverResponse.main.temp_max}</p></li>
+                            <li><p className='text-capitalize'>Min Temperature: {serverResponse.main.temp_min}</p></li>
+                            <li><p className='text-capitalize'>Average Temperature: {serverResponse.main.temp}</p></li>
+                            <li><p className='text-capitalize'>Pressure: {serverResponse.main.pressure}</p></li>
+                            <li><p className='text-capitalize'>Humidity: {serverResponse.main.humidity}</p></li>
                         </ul>
-                    </div>
+                    </div> }
                 </div>
             </div>
         </div>
