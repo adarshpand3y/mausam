@@ -20,7 +20,7 @@ const Navbar = () => {
                                 <a className="nav-link active" aria-current="page" target="_blank" rel="noreferrer" href="https://github.com/adarshpand3y/mausam">Github Repository</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link active"  target="_blank" rel="noreferrer" href="#">YouTube Playlist</a>
+                                <a className="nav-link active"  target="_blank" rel="noreferrer" href="https://www.youtube.com/playlist?list=PL2pw0hB3ciR0_9WdYi-1GHlLuHPh3lVtw">YouTube Playlist</a>
                             </li>
                         </ul>
                         <div className="d-flex">
