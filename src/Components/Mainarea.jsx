@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import Spinner from './Spinner';
 
 const serverResponse = {
     "coord": {
@@ -90,7 +91,7 @@ const Mainarea = () => {
                         <input type="text" className="form-control me-2" onChange={handleOnChange} value={userInput} id="cityInput" placeholder="Enter your city here" />
                         <button className="btn btn-dark" onClick={handleFetchData} type='submit'>Search!</button>
                     </div>
-                    {loading? "":
+                    {loading? <div className='d-flex justify-content-center m-4'><Spinner /></div>:
                     <div className="my-4">
                         <h4 className='text-center'>Showing Results for: {`${serverResponse.name}`}</h4>
                         <h5 className='text-center'>Latitude: {`${serverResponse.coord.lat}`} Longitude: {`${serverResponse.coord.lon}`}</h5>
