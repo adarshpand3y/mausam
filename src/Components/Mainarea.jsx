@@ -3,49 +3,6 @@ import { useState, useEffect } from 'react';
 import ErrorMessage from './ErrorMessage';
 import Spinner from './Spinner';
 
-const serverResponse = {
-    "coord": {
-        "lon": -0.13,
-        "lat": 51.51
-    },
-    "weather": [
-        {
-            "id": 300,
-            "main": "Drizzle",
-            "description": "light intensity drizzle",
-            "icon": "09d"
-        }
-    ],
-    "base": "stations",
-    "main": { // SHOW
-        "temp": 280.32,
-        "pressure": 1012,
-        "humidity": 81,
-        "temp_min": 279.15,
-        "temp_max": 281.15
-    },
-    "visibility": 10000,
-    "wind": {
-        "speed": 4.1,
-        "deg": 80
-    },
-    "clouds": {
-        "all": 90
-    },
-    "dt": 1485789600,
-    "sys": {
-        "type": 1,
-        "id": 5091,
-        "message": 0.0103,
-        "country": "GB",
-        "sunrise": 1485762037,
-        "sunset": 1485794875
-    },
-    "id": 2643743,
-    "name": "London",
-    "cod": 200
-};
-
 const Mainarea = () => {
     const apiKey = process.env.REACT_APP_API_KEY;
 
@@ -59,19 +16,22 @@ const Mainarea = () => {
     }
 
     const handleFetchData = async (event) => {
-        event.preventDefault();
-        try {
-            setloading(true);
-            setErrorOcurred(false);
-            const serverResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=${apiKey}`);
-            const parsedData = await serverResponse.json();
-            if (parsedData.cod != "404") {
-                setServerserverResponse(parsedData);
-            } else {
-                setErrorOcurred(true);
+        if (userInput !== "") {
+            event.preventDefault();
+            try {
+                setloading(true);
+                setErrorOcurred(false);
+                const serverResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=${apiKey}`);
+                const parsedData = await serverResponse.json();
+                if (parsedData.cod != "404") {
+                    setServerserverResponse(parsedData);
+                } else {
+                    setErrorOcurred(true);
+                }
+                setloading(false);
+            } catch (error) {
+                console.log(error);
             }
-            setloading(false);
-        } catch (error) {
         }
     }
 
@@ -82,8 +42,15 @@ const Mainarea = () => {
             setServerserverResponse(parsedData);
             setloading(false);
         } catch (error) {
+            console.log(error);
         }
     }, []);
+
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+            document.getElementById("submitButton").click();
+        }
+    }
 
     return <>
         <div className="container my-4">
@@ -91,8 +58,8 @@ const Mainarea = () => {
                 <h1 className='text-center'>React Mausam App</h1>
                 <div className="my-4 p-5">
                     <div className="d-flex">
-                        <input type="text" className="form-control me-2" onChange={handleOnChange} value={userInput} id="cityInput" placeholder="Enter your city here" />
-                        <button className="btn btn-dark" onClick={handleFetchData} type='submit'>Search!</button>
+                        <input type="text" className="form-control me-2" onChange={handleOnChange} onKeyPress={handleKeyPress} value={userInput} id="cityInput" placeholder="Enter your city here" />
+                        <button className="btn btn-dark" id="submitButton" onClick={handleFetchData} type='submit'>Search!</button>
                     </div>
                     {loading ? <div className='d-flex justify-content-center m-4'><Spinner /></div> :
                         <div className="my-4">
