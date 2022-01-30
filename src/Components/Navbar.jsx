@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Navbar = () => {
+const Navbar = (props) => {
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className={`navbar navbar-expand-lg navbar-${props.theme} bg-${props.theme}`}>
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">
                         <span className='me-2'>Mausum App</span>
@@ -24,7 +24,7 @@ const Navbar = () => {
                             </li>
                         </ul>
                         <div className="d-flex">
-                            <button className="btn btn-dark">Switch Theme</button>
+                            <button className={`btn btn-${props.theme==="light"?"dark":"light"}`} onClick={() => props.handleSwitchTheme()}>Switch to {props.theme==="light"?"Dark":"Light"} Theme</button>
                         </div>
                     </div>
                 </div>
