@@ -1,10 +1,10 @@
 import React from 'react';
 
-function ErrorMessage() {
+function ErrorMessage(props) {
     return (
         <>
             <div className="alert alert-danger" role="alert">
-                <b>Error 404: </b> City Not Found!
+                <b>Error 404: </b> City "{props.city}" Not Found!
             </div>
         </>
     );
